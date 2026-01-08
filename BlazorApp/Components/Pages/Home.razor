@@ -2,5 +2,13 @@
 
 <PageTitle>Weather Now</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Search for a place</h1>
 
+<input placeholder="Enter city name" class="form-control" @onchange="ShowSuggestions"/>
+
+@code {
+	private void ShowSuggestions(ChangeEventArgs e)
+	{
+		// Handle the input change event here
+	}
+}

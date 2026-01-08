@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "4NMKvARhN9q5eS35+YhSuHJ2RiB2OKhtiGv9O8znH8c=",
+  "Hash": "2PHJUiu5vDZ516XCwLW/nhzTBgEaxEvzHMP9K/GXgK8=",
   "Source": "BlazorApp",
   "BasePath": "_content/BlazorApp",
   "Mode": "Default",
@@ -16,6 +16,48 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7c7lhmh1j6",
+      "Integrity": "ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css"
+    },
+    {
+      "Identity": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "f96y5mhlyw",
+      "Integrity": "zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js"
+    },
     {
       "Identity": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/007zkxsw8o-r4e9w2rdcm.gz",
       "SourceId": "BlazorApp",
@@ -78,6 +120,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/wwwroot/lib/bootstrap/dist/js/bootstrap.js"
+    },
+    {
+      "Identity": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "r4ayr9qypg",
+      "Integrity": "y0aRY98ctBh1LJSK/mxiM7Drbbsw9PpLOsjczs3S4GA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js"
     },
     {
       "Identity": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/0xtiojayxm-37tfw0ft22.gz",
@@ -876,6 +939,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.min.css.map"
+    },
+    {
+      "Identity": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/tzxjg6is5z-7c7lhmh1j6.gz",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "vhp758uc7z",
+      "Integrity": "06HMNmx+2+cTKZhL9VpWUW1JAN+p1EEwQM5fy41YEoA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css"
     },
     {
       "Identity": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/wo77s772mi-1tei644dgu.gz",
@@ -2013,6 +2097,354 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.7c7lhmh1j6.css",
+      "AssetFile": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "610885"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7c7lhmh1j6"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/MudBlazor/MudBlazor.min.css"
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.css",
+      "AssetFile": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "610885"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.css",
+      "AssetFile": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/tzxjg6is5z-7c7lhmh1j6.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000015261118"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "65525"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"06HMNmx+2+cTKZhL9VpWUW1JAN+p1EEwQM5fy41YEoA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ZzHmYioOIMEX9F8thiw1Sc+cGGFHLtMWI4q4uvO13CQ="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.css.gz",
+      "AssetFile": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/tzxjg6is5z-7c7lhmh1j6.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "65525"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"06HMNmx+2+cTKZhL9VpWUW1JAN+p1EEwQM5fy41YEoA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-06HMNmx+2+cTKZhL9VpWUW1JAN+p1EEwQM5fy41YEoA="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.f96y5mhlyw.js",
+      "AssetFile": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "75407"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "f96y5mhlyw"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
+        },
+        {
+          "Name": "label",
+          "Value": "_content/MudBlazor/MudBlazor.min.js"
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.js",
+      "AssetFile": "/home/autotest/.nuget/packages/mudblazor/8.15.0/staticwebassets/MudBlazor.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "75407"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.js",
+      "AssetFile": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000060591372"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "16503"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"y0aRY98ctBh1LJSK/mxiM7Drbbsw9PpLOsjczs3S4GA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zR6goaoMpR/YVMMSTfCmVNo3kuPgOkjF/ovhkUhAkbk="
+        }
+      ]
+    },
+    {
+      "Route": "_content/MudBlazor/MudBlazor.min.js.gz",
+      "AssetFile": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/0wz98yz2xy-f96y5mhlyw.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "16503"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"y0aRY98ctBh1LJSK/mxiM7Drbbsw9PpLOsjczs3S4GA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 23 Nov 2025 03:42:52 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-y0aRY98ctBh1LJSK/mxiM7Drbbsw9PpLOsjczs3S4GA="
+        }
+      ]
+    },
     {
       "Route": "app.css",
       "AssetFile": "/home/autotest/Projects/Repo/BlazorApp/BlazorApp/obj/Debug/net9.0/compressed/niqfivrdr6-khy4lop6wu.gz",
