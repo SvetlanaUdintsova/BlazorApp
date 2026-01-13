@@ -1,10 +1,15 @@
-# Trying xUnit with HttpClient and RestSharp
+# A small weather App in Blazor
 
-This project is a sandbox for learning the xUnit and RestSharp.
+This project is a sandbox for learning .NET, Blazor, xUnit.
 
-The public API taken for test is the norwegian weather provider [api.met.no](https://api.met.no/weatherapi/locationforecast/2.0/documentation)
+It is using a free service (that allows a certain number of requests per month)
 
-ATTENTION! The creator of API specifies how exactly API can be consumed without breaking code of conduct on [Terms of Service](https://api.met.no/doc/TermsOfService) section.
+
+
+The public API is taken into use to getting geographical coordinates [https://openweathermap.org/api/geocoding-api](https://openweathermap.org/api/geocoding-api) that will later be passed into
+
+for getting the weather.s
+
 
 ## Configuration
 
@@ -13,13 +18,9 @@ Before running this project, you **must** prepopulate the `appsettings.json` fil
 ```json
 {
   "AppSettings": {
-    "ContactEmail": "your_email@example.com",
-    "UserAgent": "Your project name"
+    "APIAccessKey": " "
   }
 }
 ```
 
-- **ContactEmail**: Your email address (required by the api.met.no API for identification)
-- **UserAgent**: Your application name or identifier
-
-Replace the placeholder values with your actual email and project name before running the tests.
+- **APIAccessKey**: make your own free of charge on [https://openweathermap.org/api/geocoding-api](https://openweathermap.org/api/geocoding-api).
