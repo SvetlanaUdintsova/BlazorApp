@@ -60,27 +60,25 @@
             return;
         }
 
-        //var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
-        //httpRequestDetails = $"GET {url}";
+        var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
         try
         {
-            //var response = await Http.GetAsync(url);
-            //httpResponseCode = (int)response.StatusCode;
-            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            var response = await Http.GetAsync(url);
+            httpResponseCode = (int)response.StatusCode;
+            //var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             
-            //if (response.IsSuccessStatusCode)
-            //{
-                var jsonContent2 = "[{\"name\":\"Stava\",\"local_names\":{\"sr\":\"Штава\",\"en\":\"Stava\"},\"lat\":43.1704962,\"lon\":20.9726989,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"local_names\":{\"en\":\"Stava\",\"sr\":\"Штава\"},\"lat\":43.161340100000004,\"lon\":20.963525952570365,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"lat\":59.4975661,\"lon\":18.2290557,\"country\":\"SE\"},{\"name\":\"Stava\",\"lat\":46.3168404,\"lon\":11.5023085,\"country\":\"IT\",\"state\":\"Trentino-Alto Adige/Südtirol\"},{\"name\":\"Stava\",\"lat\":59.2330004,\"lon\":5.197986,\"country\":\"NO\"}]";
+            if (response.IsSuccessStatusCode)
+            {
+                //var jsonContent2 = "[{\"name\":\"Stava\",\"local_names\":{\"sr\":\"Штава\",\"en\":\"Stava\"},\"lat\":43.1704962,\"lon\":20.9726989,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"local_names\":{\"en\":\"Stava\",\"sr\":\"Штава\"},\"lat\":43.161340100000004,\"lon\":20.963525952570365,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"lat\":59.4975661,\"lon\":18.2290557,\"country\":\"SE\"},{\"name\":\"Stava\",\"lat\":46.3168404,\"lon\":11.5023085,\"country\":\"IT\",\"state\":\"Trentino-Alto Adige/Südtirol\"},{\"name\":\"Stava\",\"lat\":59.2330004,\"lon\":5.197986,\"country\":\"NO\"}]";
                 var jsonContent = await response.Content.ReadAsStringAsync();
-                var rawJson = JsonSerializer.Deserialize<JsonNode>(jsonContent2);
-                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent2);
+                var rawJson = JsonSerializer.Deserialize<JsonNode>(jsonContent);
+                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent);
                 locations = content ?? new();
-            //}
-            //else
-            //{
-                //locations = new();
-                //httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nError: Request failed";
-            //}
+            }
+            else
+            {
+                locations = new();
+            }
         }
         catch (Exception ex)
         {
@@ -105,11 +103,10 @@
     var apiKey = Configuration["AppSettings:AppId"];
 
     var url =
-        $"https://api.openweathermap.org/data/3.0/onecall" +
-        $"?lat={lat}" +
-        $"&lon={lon}" +
-        $"&exclude={exclude}" +
-        $"&appid={apiKey}";
+    $"https://api.openweathermap.org/data/2.5/weather" +
+    $"?lat={lat}" +
+    $"&lon={lon}" +
+    $"&appid={apiKey}";
 
     try
     {
@@ -160,7 +157,7 @@
 }
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    @if (httpResponseCode == 0 && locations.Count > 0)
+    @if (httpResponseCode == 200 && locations.Count > 0)
     {
         <MudGrid>
             <MudItem xs="12" sm="6" md="8">
@@ -184,7 +181,7 @@
             </MudItem>
         </MudGrid>
     }
-    else if (httpResponseCode != 0)
+    else if (httpResponseCode != 200)
     {
         <MudPaper Elevation="2" Class="pa-4 mt-4" Style="background-color: #ffebee;">
             <MudText Typo="Typo.h6" Color="Color.Error">The location you are looking for is not found</MudText>
