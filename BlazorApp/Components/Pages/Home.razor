@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 
 @using System.Text.Json
+@using System.Text.Json.Nodes
 
 @inject IConfiguration Configuration
 @inject HttpClient Http
@@ -20,12 +21,11 @@
                       Variant="Variant.Outlined" 
                       Adornment="Adornment.Start" 
                       AdornmentIcon="@Icons.Material.Filled.Search"
-                      Style="width: 200px; flex-shrink: 0;"
-                      OnKeyDown="OnKeyDown" />
+                      Style="width: 200px; flex-shrink: 0;"/>
         
         <MudButton Variant="Variant.Filled" 
                    Color="Color.Primary" 
-                   OnClick="async () => await FetchLocations(searchQuery)"
+                   OnClick="OnSearchInput"
                    Style="height: 56px; min-width: 56px;">
             Search</MudButton>
     </div>
@@ -33,28 +33,12 @@
 
 @code {
     private string searchQuery = "";
-    private string httpRequestDetails = "";
     private int httpResponseCode = 0;
-
     private List<Location> locations = new();
-    private List<string> enteredTexts = new();
 
-    async Task OnKeyDown(KeyboardEventArgs e)
+
+    private async Task OnSearchInput()
     {
-        if (e.Key == "Enter")
-        {
-            enteredTexts.Add(searchQuery);
-            if (!string.IsNullOrWhiteSpace(searchQuery))
-            {
-                await FetchLocations(searchQuery);
-            }
-        }
-    }
-
-
-    private async Task OnSearchInput(ChangeEventArgs e)
-    {
-        searchQuery = e.Value?.ToString() ?? "";
         if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length >= 3)
         {
             await FetchLocations(searchQuery);
@@ -62,7 +46,6 @@
         else
         {
             locations = new();
-            httpRequestDetails = "";
             httpResponseCode = 0;
         }
     }
@@ -77,69 +60,122 @@
             return;
         }
 
-        var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
-        httpRequestDetails = $"GET {url}";
+        //var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
+        //httpRequestDetails = $"GET {url}";
         try
         {
-            var response = await Http.GetAsync(url);
-            httpResponseCode = (int)response.StatusCode;
+            //var response = await Http.GetAsync(url);
+            //httpResponseCode = (int)response.StatusCode;
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
             
-            if (response.IsSuccessStatusCode)
-            {
+            //if (response.IsSuccessStatusCode)
+            //{
+                var jsonContent2 = "[{\"name\":\"Stava\",\"local_names\":{\"sr\":\"Штава\",\"en\":\"Stava\"},\"lat\":43.1704962,\"lon\":20.9726989,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"local_names\":{\"en\":\"Stava\",\"sr\":\"Штава\"},\"lat\":43.161340100000004,\"lon\":20.963525952570365,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"lat\":59.4975661,\"lon\":18.2290557,\"country\":\"SE\"},{\"name\":\"Stava\",\"lat\":46.3168404,\"lon\":11.5023085,\"country\":\"IT\",\"state\":\"Trentino-Alto Adige/Südtirol\"},{\"name\":\"Stava\",\"lat\":59.2330004,\"lon\":5.197986,\"country\":\"NO\"}]";
                 var jsonContent = await response.Content.ReadAsStringAsync();
-                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent);
+                var rawJson = JsonSerializer.Deserialize<JsonNode>(jsonContent2);
+                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent2);
                 locations = content ?? new();
-                httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nLocations found: {locations.Count}";
-            }
-            else
-            {
-                locations = new();
-                httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nError: Request failed";
-            }
+            //}
+            //else
+            //{
+                //locations = new();
+                //httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nError: Request failed";
+            //}
         }
         catch (Exception ex)
         {
             // Handle error
             locations = new();
             httpResponseCode = 0;
-            httpRequestDetails += $"\nStatus: Error\nMessage: {ex.Message}";
         }
     }
 
+    private async Task FetchWeather(double lat, double lon)
+{
+    var weather = await GenerateWeather(lat, lon);
+
+    // TODO: bind weather to UI / state
+}
+
+    private async Task<WeatherResponse?> GenerateWeather(
+    double lat,
+    double lon,
+    string exclude = "minutely,alerts")
+{
+    var apiKey = Configuration["AppSettings:AppId"];
+
+    var url =
+        $"https://api.openweathermap.org/data/3.0/onecall" +
+        $"?lat={lat}" +
+        $"&lon={lon}" +
+        $"&exclude={exclude}" +
+        $"&appid={apiKey}";
+
+    try
+    {
+        var response = await Http.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            // TODO: log or handle error
+            return null;
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<WeatherResponse>(
+            json,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+    }
+    catch (Exception ex)
+    {
+        // TODO: log exception
+        return null;
+    }
+}
+
     public class Location
     {
-        public string? Name { get; set; }
+        public string? name { get; set; }
+        public double lat { get; set; }
+        public double lon { get; set; }
+        public string? country { get; set; }
+    }
+
+    public class WeatherResponse
+    {
         public double Lat { get; set; }
         public double Lon { get; set; }
-        public string? Country { get; set; }
+        public CurrentWeather? Current { get; set; }
+    }
+
+    public class CurrentWeather
+    {
+        public double Temp { get; set; }
+        public int Humidity { get; set; }
     }
 }
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    @if (httpResponseCode == 200 && locations.Count > 0)
+    @if (httpResponseCode == 0 && locations.Count > 0)
     {
         <MudGrid>
-            <MudItem xs="12" sm="6" md="4">
-                <MudPaper Elevation="2" Class="pa-4">
-                    <MudText Typo="Typo.h6">@searchQuery HTTP Request Details</MudText>
-                    <MudText Typo="Typo.body2" Style="white-space: pre-wrap; font-family: monospace; margin-top: 12px;">
-                        Response Code: @httpResponseCode
-                        @httpRequestDetails
-                    </MudText>
-                </MudPaper>
-            </MudItem>
             <MudItem xs="12" sm="6" md="8">
                 <MudPaper Elevation="2" Class="pa-4">
                     <MudText Typo="Typo.h6">Locations Found</MudText>
                     <MudList T="Location">
                         @foreach (var location in locations)
                         {
-                            <MudListItem T="Location">
+                            <MudListItem T="Location" Clickable="true"
+             OnClick="@(() => FetchWeather(location.lat, location.lon))" Style="cursor: pointer;">
                                 <MudText Typo="Typo.body2">
-                                    <strong>@location.Name</strong>, @location.Country
+                                    <strong>@location.name</strong>, @location.country
                                 </MudText>
                                 <MudText Typo="Typo.caption">
-                                    Latitude: @location.Lat | Longitude: @location.Lon
+                                    Latitude: @location.lat | Longitude: @location.lon
                                 </MudText>
                             </MudListItem>
                         }
