@@ -13,13 +13,23 @@
 <MudText Typo="Typo.h6">
     Type any city
 </MudText>
-<MudTextField @bind-Value="searchQuery" 
-              Label="Search for a city" 
-              Variant="Variant.Outlined" 
-              Adornment="Adornment.Start" 
-              AdornmentIcon="@Icons.Material.Filled.Search"
-              OnInput="OnSearchInput" OnKeyDown="OnKeyDown" />
-
+<div style="width: 350px;">
+    <div style="display: flex; align-items: center;">
+        <MudTextField @bind-Value="searchQuery" 
+                      Label="Search for a city" 
+                      Variant="Variant.Outlined" 
+                      Adornment="Adornment.Start" 
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      Style="width: 200px; flex-shrink: 0;"
+                      OnKeyDown="OnKeyDown" />
+        
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   OnClick="async () => await FetchLocations(searchQuery)"
+                   Style="height: 56px; min-width: 56px;">
+            Search</MudButton>
+    </div>
+</div>
 
 @code {
     private string searchQuery = "";
@@ -121,10 +131,10 @@
             <MudItem xs="12" sm="6" md="8">
                 <MudPaper Elevation="2" Class="pa-4">
                     <MudText Typo="Typo.h6">Locations Found</MudText>
-                    <MudList>
+                    <MudList T="Location">
                         @foreach (var location in locations)
                         {
-                            <MudListItem>
+                            <MudListItem T="Location">
                                 <MudText Typo="Typo.body2">
                                     <strong>@location.Name</strong>, @location.Country
                                 </MudText>
