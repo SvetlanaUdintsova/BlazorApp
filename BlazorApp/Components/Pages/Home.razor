@@ -1,6 +1,8 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 
+@using System.Text.Json
+
 @inject IConfiguration Configuration
 @inject HttpClient Http
 
@@ -22,6 +24,7 @@
 @code {
     private string searchQuery = "";
     private string httpRequestDetails = "";
+    private int httpResponseCode = 0;
 
     private List<Location> locations = new();
     private List<string> enteredTexts = new();
@@ -31,6 +34,10 @@
         if (e.Key == "Enter")
         {
             enteredTexts.Add(searchQuery);
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                await FetchLocations(searchQuery);
+            }
         }
     }
 
@@ -38,13 +45,15 @@
     private async Task OnSearchInput(ChangeEventArgs e)
     {
         searchQuery = e.Value?.ToString() ?? "";
-        if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length > 3)
+        if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length >= 3)
         {
             await FetchLocations(searchQuery);
         }
         else
         {
             locations = new();
+            httpRequestDetails = "";
+            httpResponseCode = 0;
         }
     }
 
@@ -62,14 +71,27 @@
         httpRequestDetails = $"GET {url}";
         try
         {
-            var response = await Http.GetFromJsonAsync<List<Location>>(url);
-            locations = response ?? new();
-            httpRequestDetails += $"\nStatus: 200 OK\nLocations found: {locations.Count}";
+            var response = await Http.GetAsync(url);
+            httpResponseCode = (int)response.StatusCode;
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonContent = await response.Content.ReadAsStringAsync();
+                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent);
+                locations = content ?? new();
+                httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nLocations found: {locations.Count}";
+            }
+            else
+            {
+                locations = new();
+                httpRequestDetails += $"\nStatus: {httpResponseCode} {response.StatusCode}\nError: Request failed";
+            }
         }
         catch (Exception ex)
         {
             // Handle error
             locations = new();
+            httpResponseCode = 0;
             httpRequestDetails += $"\nStatus: Error\nMessage: {ex.Message}";
         }
     }
@@ -84,14 +106,43 @@
 }
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 300px;">
-                <MudText Typo="Typo.h6">@searchQuery HTTP Request Details</MudText>
-                <MudText Typo="Typo.body2" Style="white-space: pre-wrap; font-family: monospace; margin-top: 12px;">
-                    @httpRequestDetails
-                </MudText>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+    @if (httpResponseCode == 200 && locations.Count > 0)
+    {
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <MudText Typo="Typo.h6">@searchQuery HTTP Request Details</MudText>
+                    <MudText Typo="Typo.body2" Style="white-space: pre-wrap; font-family: monospace; margin-top: 12px;">
+                        Response Code: @httpResponseCode
+                        @httpRequestDetails
+                    </MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="8">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <MudText Typo="Typo.h6">Locations Found</MudText>
+                    <MudList>
+                        @foreach (var location in locations)
+                        {
+                            <MudListItem>
+                                <MudText Typo="Typo.body2">
+                                    <strong>@location.Name</strong>, @location.Country
+                                </MudText>
+                                <MudText Typo="Typo.caption">
+                                    Latitude: @location.Lat | Longitude: @location.Lon
+                                </MudText>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    }
+    else if (httpResponseCode != 0)
+    {
+        <MudPaper Elevation="2" Class="pa-4 mt-4" Style="background-color: #ffebee;">
+            <MudText Typo="Typo.h6" Color="Color.Error">The location you are looking for is not found</MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">Response Code: @httpResponseCode</MudText>
+        </MudPaper>
+    }
 </MudContainer>
