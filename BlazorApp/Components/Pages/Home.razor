@@ -1,22 +1,122 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
-<PageTitle>Weather Now</PageTitle>
+@inject IConfiguration Configuration
+@inject HttpClient Http
 
-<h1>Search for a place</h1>
+<PageTitle>Current weather</PageTitle>
 
-<input placeholder="Enter city name" class="form-control" @onchange="ShowSuggestions"/>
+<h1>Current weather</h1>
+
+<MudText Typo="Typo.h6">
+    Type any city
+</MudText>
+<MudTextField @bind-Value="searchQuery" 
+              Label="Search for a city" 
+              Variant="Variant.Outlined" 
+              Adornment="Adornment.Start" 
+              AdornmentIcon="@Icons.Material.Filled.Search"
+              OnInput="OnSearchInput" OnKeyDown="OnKeyDown" />
+
 
 @code {
-	private void ShowSuggestions(ChangeEventArgs e)
-	{
-		// Handle the input change event here
-	}
+    private string searchQuery = "";
+    private string httpRequestDetails = "";
+
+    private List<Location> locations = new();
+    private List<string> enteredTexts = new();
+
+    async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            enteredTexts.Add(searchQuery);
+        }
+    }
+
+
+    private async Task OnSearchInput(ChangeEventArgs e)
+    {
+        searchQuery = e.Value?.ToString() ?? "";
+        if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length > 3)
+        {
+            await FetchLocations(searchQuery);
+        }
+        else
+        {
+            locations = new();
+        }
+    }
+
+    private async Task FetchLocations(string query)
+    {
+        var apiKey = Configuration["AppSettings:AppId"];
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            Console.WriteLine("Error: API key is missing. Please configure AppSettings:AppId in appsettings.json");
+            // Handle missing API key
+            return;
+        }
+
+        var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
+        httpRequestDetails = $"GET {url}";
+        try
+        {
+            var response = await Http.GetFromJsonAsync<List<Location>>(url);
+            locations = response ?? new();
+            httpRequestDetails += $"\nStatus: 200 OK\nLocations found: {locations.Count}";
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+            locations = new();
+            httpRequestDetails += $"\nStatus: Error\nMessage: {ex.Message}";
+        }
+    }
+
+    public class Location
+    {
+        public string? Name { get; set; }
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+        public string? Country { get; set; }
+    }
 }
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 300px;"></MudPaper>
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 300px;">
+                <MudText Typo="Typo.h6">@searchQuery HTTP Request Details</MudText>
+                <MudText Typo="Typo.body2" Style="white-space: pre-wrap; font-family: monospace; margin-top: 12px;">
+                    @httpRequestDetails
+                </MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4">
+                <MudText Typo="Typo.h6">Locations Found</MudText>
+                @if (locations.Count == 0)
+                {
+                    <MudText Typo="Typo.body2" Class="mt-4">No locations found</MudText>
+                }
+                else
+                {
+                    <MudList>
+                        @foreach (var location in locations)
+                        {
+                            <MudListItem>
+                                <MudText Typo="Typo.body2">
+                                    <strong>@location.Name</strong>, @location.Country
+                                </MudText>
+                                <MudText Typo="Typo.caption">
+                                    Latitude: @location.Lat | Longitude: @location.Lon
+                                </MudText>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+            </MudPaper>
         </MudItem>
     </MudGrid>
 </MudContainer>
