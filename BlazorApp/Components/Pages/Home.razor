@@ -1,0 +1,191 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+@using System.Text.Json
+@using System.Text.Json.Nodes
+
+@inject IConfiguration Configuration
+@inject HttpClient Http
+
+<PageTitle>Current weather</PageTitle>
+
+<h1>Current weather</h1>
+
+<MudText Typo="Typo.h6">
+    Type any city
+</MudText>
+<div style="width: 350px;">
+    <div style="display: flex; align-items: center;">
+        <MudTextField @bind-Value="searchQuery" 
+                      Label="Search for a city" 
+                      Variant="Variant.Outlined" 
+                      Adornment="Adornment.Start" 
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      Style="width: 200px; flex-shrink: 0;"/>
+        
+        <MudButton Variant="Variant.Filled" 
+                   Color="Color.Primary" 
+                   OnClick="OnSearchInput"
+                   Style="height: 56px; min-width: 56px;">
+            Search</MudButton>
+    </div>
+</div>
+
+@code {
+    private string searchQuery = "";
+    private int httpResponseCode = 0;
+    private List<Location> locations = new();
+
+
+    private async Task OnSearchInput()
+    {
+        if (!string.IsNullOrWhiteSpace(searchQuery) && searchQuery.Length >= 3)
+        {
+            await FetchLocations(searchQuery);
+        }
+        else
+        {
+            locations = new();
+            httpResponseCode = 0;
+        }
+    }
+
+    private async Task FetchLocations(string query)
+    {
+        var apiKey = Configuration["AppSettings:AppId"];
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            Console.WriteLine("Error: API key is missing. Please configure AppSettings:AppId in appsettings.json");
+            // Handle missing API key
+            return;
+        }
+
+        var url = $"http://api.openweathermap.org/geo/1.0/direct?q={Uri.EscapeDataString(query)}&limit=5&appid={apiKey}";
+        try
+        {
+            var response = await Http.GetAsync(url);
+            httpResponseCode = (int)response.StatusCode;
+            //var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                //var jsonContent2 = "[{\"name\":\"Stava\",\"local_names\":{\"sr\":\"Штава\",\"en\":\"Stava\"},\"lat\":43.1704962,\"lon\":20.9726989,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"local_names\":{\"en\":\"Stava\",\"sr\":\"Штава\"},\"lat\":43.161340100000004,\"lon\":20.963525952570365,\"country\":\"RS\",\"state\":\"Central Serbia\"},{\"name\":\"Stava\",\"lat\":59.4975661,\"lon\":18.2290557,\"country\":\"SE\"},{\"name\":\"Stava\",\"lat\":46.3168404,\"lon\":11.5023085,\"country\":\"IT\",\"state\":\"Trentino-Alto Adige/Südtirol\"},{\"name\":\"Stava\",\"lat\":59.2330004,\"lon\":5.197986,\"country\":\"NO\"}]";
+                var jsonContent = await response.Content.ReadAsStringAsync();
+                var rawJson = JsonSerializer.Deserialize<JsonNode>(jsonContent);
+                var content = JsonSerializer.Deserialize<List<Location>>(jsonContent);
+                locations = content ?? new();
+            }
+            else
+            {
+                locations = new();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle error
+            locations = new();
+            httpResponseCode = 0;
+        }
+    }
+
+    private async Task FetchWeather(double lat, double lon)
+{
+    var weather = await GenerateWeather(lat, lon);
+
+    // TODO: bind weather to UI / state
+}
+
+    private async Task<WeatherResponse?> GenerateWeather(
+    double lat,
+    double lon,
+    string exclude = "minutely,alerts")
+{
+    var apiKey = Configuration["AppSettings:AppId"];
+
+    var url =
+    $"https://api.openweathermap.org/data/2.5/weather" +
+    $"?lat={lat}" +
+    $"&lon={lon}" +
+    $"&appid={apiKey}";
+
+    try
+    {
+        var response = await Http.GetAsync(url);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            // TODO: log or handle error
+            return null;
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<WeatherResponse>(
+            json,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+    }
+    catch (Exception ex)
+    {
+        // TODO: log exception
+        return null;
+    }
+}
+
+    public class Location
+    {
+        public string? name { get; set; }
+        public double lat { get; set; }
+        public double lon { get; set; }
+        public string? country { get; set; }
+    }
+
+    public class WeatherResponse
+    {
+        public double Lat { get; set; }
+        public double Lon { get; set; }
+        public CurrentWeather? Current { get; set; }
+    }
+
+    public class CurrentWeather
+    {
+        public double Temp { get; set; }
+        public int Humidity { get; set; }
+    }
+}
+
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    @if (httpResponseCode == 200 && locations.Count > 0)
+    {
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="8">
+                <MudPaper Elevation="2" Class="pa-4">
+                    <MudText Typo="Typo.h6">Locations Found</MudText>
+                    <MudList T="Location">
+                        @foreach (var location in locations)
+                        {
+                            <MudListItem T="Location" Clickable="true"
+             OnClick="@(() => FetchWeather(location.lat, location.lon))" Style="cursor: pointer;">
+                                <MudText Typo="Typo.body2">
+                                    <strong>@location.name</strong>, @location.country
+                                </MudText>
+                                <MudText Typo="Typo.caption">
+                                    Latitude: @location.lat | Longitude: @location.lon
+                                </MudText>
+                            </MudListItem>
+                        }
+                    </MudList>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    }
+    else if (httpResponseCode != 200)
+    {
+        <MudPaper Elevation="2" Class="pa-4 mt-4" Style="background-color: #ffebee;">
+            <MudText Typo="Typo.h6" Color="Color.Error">The location you are looking for is not found</MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">Response Code: @httpResponseCode</MudText>
+        </MudPaper>
+    }
+</MudContainer>
